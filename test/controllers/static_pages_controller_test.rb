@@ -1,4 +1,4 @@
-require '~/RubyMineProjects/RORT/sample_app/test/test_helper'
+require_relative '../test_helper'
 
 class StaticPagesControllerTest < ActionDispatch::IntegrationTest
 
