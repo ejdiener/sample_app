@@ -2,7 +2,9 @@ require_relative '../helpers/sessions_helper'
 
 class UsersController < ApplicationController
   include(SessionsHelper)
-  def index; end
+  def index
+    @users = User.all
+  end
 
   def show
     @user = User.find(params[:id])
