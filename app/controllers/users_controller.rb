@@ -2,6 +2,8 @@ require_relative '../helpers/sessions_helper'
 
 class UsersController < ApplicationController
   include(SessionsHelper)
+  before_action :logged_in_user, only: [:edit, :update]
+
   def index
     @users = User.all
   end
@@ -19,7 +21,7 @@ class UsersController < ApplicationController
     if @user.save
       reset_session
       log_in @user
-      flash[:success] = "Welcome to the Sample App!"
+      flash[:success] = 'Welcome to the Sample App!'
       redirect_to @user
     else
       render 'new', status: :unprocessable_entity
@@ -33,7 +35,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      # Handle a successful update.
+      flash[:success] = "Profile updated"
+      redirect_to @user
     else
       render 'edit', status: :unprocessable_entity
     end
@@ -45,5 +48,14 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
+  # Before filters
+
+  # Confirms a logged-in user.
+  def logged_in_user
+    unless logged_in?
+      flash[:danger] = "Please log in."
+      redirect_to login_url, status: :see_other
+    end
+  end
 
 end
